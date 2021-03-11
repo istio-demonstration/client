@@ -50,6 +50,8 @@ pipeline {
           steps {
                   sh 'kubectl apply -f deploy.yaml'
                   sh 'kubectl set image deployments/web-app-experimental web-app=${SERVICE_NAME}:${GITCOMMITSHA}'
+                  // after first deploy, u can comment this out
+                  sh 'kubectl set image deployments/web-app-original web-app=${SERVICE_NAME}:${GITCOMMITSHA}'
                 }
       }
    }
