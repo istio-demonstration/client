@@ -18,9 +18,9 @@ spec:
         # env:
         # - name: SPRING_PROFILES_ACTIVE
         #   value: production-microservice
-        image: client
+        image: 839928622/client
         # pull image from remote server ?
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         readinessProbe:
           httpGet:
             path: /
