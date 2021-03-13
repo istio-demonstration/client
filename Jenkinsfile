@@ -30,7 +30,7 @@ pipeline {
              sh 'docker image build  -t ${SERVICE_NAME}:latest -t ${SERVICE_NAME}:${GITCOMMITSHA} .'
 
             script {
-               dockerImage = docker.build registry + ":${GITCOMMITSHA}"
+               dockerImage = docker.build registry
             }
          }
       }
@@ -39,7 +39,9 @@ pipeline {
          steps {
            script {
             docker.withRegistry( '', dockerhub_credential){
-               dockerImage.push()
+               dockerImage.push("${GITCOMMITSHA}")
+               dockerImage.push("latest")
+
             }
 
            }
@@ -51,7 +53,7 @@ pipeline {
                   sh 'kubectl apply -f deploy.yaml'
                   sh 'kubectl set image deployments/web-app-experimental web-app=${SERVICE_NAME}:${GITCOMMITSHA}'
                   // after first deploy, u can comment this out
-                  sh 'kubectl set image deployments/web-app-original web-app=${SERVICE_NAME}:${GITCOMMITSHA}'
+                  sh 'kubectl set image deployments/web-app-original web-app=${registry}:${GITCOMMITSHA}'
                 }
       }
    }
